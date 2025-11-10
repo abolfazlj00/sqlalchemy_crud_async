@@ -10,8 +10,8 @@ from ..schemas.query import FindOneRequestData, FindManyRequestData
 class CRUDBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchemaType, FilterSchemaType]):
     def __init__(self, model_cls: type[ModelType], read_cls: type[ReadSchemaType]):
         super().__init__()
-        self.__model_cls = model_cls
-        self.__read_cls = read_cls
+        self._model_cls = model_cls
+        self._read_cls = read_cls
 
     async def create_one(
         self,
@@ -21,7 +21,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchema
     ):
         return await create_one(
             session,
-            self.__model_cls,
+            self._model_cls,
             obj_in,
             commit=commit
         )
@@ -34,7 +34,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchema
     ):
         return await create_many(
             session,
-            self.__model_cls,
+            self._model_cls,
             objs_in,
             commit=commit
         )
@@ -66,10 +66,10 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchema
     ):
         return await read_one(
             session,
-            self.__model_cls,
+            self._model_cls,
             filters,
             req,
-            self.__read_cls if return_schema else None
+            self._read_cls if return_schema else None
         )
     
     @overload
@@ -99,10 +99,10 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchema
     ):
         return await read_many(
             session,
-            self.__model_cls,
+            self._model_cls,
             filters,
             req,
-            self.__read_cls if return_schema else None
+            self._read_cls if return_schema else None
         )
 
     async def update_one(
@@ -116,7 +116,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchema
     ):
         return await update_one(
             session,
-            self.__model_cls,
+            self._model_cls,
             filters,
             obj_in,
             req,
@@ -135,7 +135,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchema
     ):
         return await update_many(
             session,
-            self.__model_cls,
+            self._model_cls,
             filters,
             obj_in,
             req,
@@ -152,7 +152,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchema
     ):
         return await delete_one(
             session,
-            self.__model_cls,
+            self._model_cls,
             filters,
             req,
             commit=commit
@@ -167,7 +167,7 @@ class CRUDBase(Generic[ModelType, CreateSchemaType, ReadSchemaType, UpdateSchema
     ):
         return await delete_many(
             session,
-            self.__model_cls,
+            self._model_cls,
             filters,
             req,
             commit=commit
